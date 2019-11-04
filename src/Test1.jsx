@@ -31,9 +31,11 @@ const Test1 = () => {
         <img style={{width: 200}} src={test1Example}/>
       </div>
       <div>
-        [replace me]
+        {
+          ITEMS.map((item) => <div key={item.name}>Name: {item.name} Price: {item.price}</div>)
+        }
       </div>
-      <div><span className={"bold"}>Summa kokku:</span> [replace me]</div>
+      <div><span className={"bold"}>Summa kokku:</span> {ITEMS.reduce((acc, item) => acc + item.price, 0)}</div>
     </div>
   );
 };
