@@ -5,6 +5,39 @@ import example2 from "./images/2.png";
 import example3 from "./images/3.png";
 
 class Test3 extends React.PureComponent{
+  
+  state = {
+    name: "",
+    age: null
+  };
+
+  handleChange = (event) => {
+    console.log(event.target.value);
+    this.setState({
+      [event.target.username]: event.target.value,
+      [event.target.age]: event.target.value
+    });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    fetch("/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(this.state)
+    })
+    .then(res => {
+      return res.text();
+    })
+    .then(text => {
+      this.setState({
+        responseText: text
+      });
+    });
+  }
+
   render(){
     return (
       <div>
@@ -31,14 +64,14 @@ class Test3 extends React.PureComponent{
         <h3>
           Lahendus:
         </h3>
-        <form >
+        <form onSubmit={this.handleSubmit}>
           <div className={"row"}>
             <label htmlFor="username">Username</label>
-            <input name="username" type="text"/>
+            <input onChange={this.handleChange} name="username" value={this.state.username} type="text"/>
           </div>
           <div className={"row"}>
             <label htmlFor="age">Age</label>
-            <input name="age"  type="number"/>
+            <input onChange={this.handleChange} name="age" value={this.state.age} type="number"/>
           </div>
           <div className={"row"} style={{justifyContent: "flex-end"}}>
             <button>Send</button>
@@ -46,10 +79,10 @@ class Test3 extends React.PureComponent{
         </form>
 
         {
-          // this.state.responseText &&
-          // <div className={"response"}>
-          //   {this.state.responseText}
-          // </div>
+          this.state.responseText &&
+          <div className={"response"}>
+            {this.state.responseText}
+          </div>
         }
 
       </div>
