@@ -15,7 +15,10 @@ router.get("/random", async (req, res)=>{
 });
 
 router.get("/similar/:productId", async (req, res)=>{
-  res.status(500).send("Implement")
+  const product = await Product.findById(req.params.productId);
+  const brand = product.title.split(" ")[0];
+  const products = await Product.find({ "title": { $regex: brand, $options: "i"}});
+  res.send(products);
 });
 
 module.exports = router;
