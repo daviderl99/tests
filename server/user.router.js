@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const {User} = require("./user.model.js");
+const mongoose = require("mongoose");
+const multer = require('multer');
 
 router.get("/", async (req, res)=>{
   const xs = await User.find({});
@@ -19,6 +21,8 @@ router.post("/", (req, res) => {
     res.status(201);
   });
 });
+
+/** Add something here*/
 
 module.exports = router;
 
