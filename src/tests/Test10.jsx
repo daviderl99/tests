@@ -1,11 +1,54 @@
 import React from "react";
 
 class Test10 extends React.PureComponent {
+
+  constructor(props){
+    super(props);
+    this.inputFullName = React.createRef();
+    this.inputAddress = React.createRef();
+    this.inputPhoneNumber = React.createRef();
+    this.inputPersonalCode = React.createRef();
+  }
+  
+  handleSubmit = (e) => {
+    const formBody = {
+      fullName: this.inputFullName.current.value,
+      address: this.inputAddress.current.value,
+      phoneNumber: this.inputPhoneNumber.current.value,
+      personalCode: this.inputPersonalCode.current.value
+    };
+
+    e.preventDefault();
+    fetch("/api/v1/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formBody)
+    })
+    .then(res => {
+      console.log(res);
+      return res.text();
+    });
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
   render() {
     return (
       <div>
         <Task />
-        implement
+        <form onSubmit={this.handleSubmit}>
+          <input type="text" placeholder="Name" name="fullName" ref={this.inputFullName}/>
+          <input type="text" placeholder="Aadress" name="address" ref={this.inputAddress}/>
+          <input type="number" placeholder="Number" name="phoneNumber" ref={this.inputPhoneNumber}/>
+          <input type="number" placeholder="ID" name="personalCode" ref={this.inputPersonalCode}/>
+          <button>Esita</button>
+        </form>
       </div>
     );
   }

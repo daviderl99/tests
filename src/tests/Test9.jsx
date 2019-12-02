@@ -1,11 +1,45 @@
 import React from "react";
 
 class Test9 extends React.PureComponent {
+  state = {
+    fullName: "",
+    address: "",
+    phoneNumber: "",
+    personalCode: ""
+  };
+  
+  handleSubmit = (e) => {
+    e.preventDefault();
+    fetch("/api/v1/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(this.state)
+    })
+    .then(res => {
+      console.log(res);
+      return res.text();
+    });
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
   render() {
     return (
       <div>
         <Task />
-        implement
+        <form onSubmit={this.handleSubmit}>
+          <input type="text" placeholder="Name" name="fullName" value={this.state.fullName} onChange={this.handleChange}/>
+          <input type="text" placeholder="Aadress" name="address" value={this.state.address} onChange={this.handleChange}/>
+          <input type="number" placeholder="Number" name="phoneNumber" value={this.state.phoneNumber} onChange={this.handleChange}/>
+          <input type="number" placeholder="ID" name="personalCode" value={this.state.personalCode} onChange={this.handleChange}/>
+          <button>Esita</button>
+        </form>
       </div>
     );
   }

@@ -1,28 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const {User} = require("./user.model.js");
-const mongoose = require("mongoose");
-const multer = require('multer');
 
 router.get("/", async (req, res)=>{
   const xs = await User.find({});
   res.send(xs);
 });
 
-router.post("/", (req, res) => {
-  const user = new User(req.body);
-  user.save(err => {
-    if (err){
-      console.error("Error: ", err);
-      res.status(500);
-      return;
-    }
-    console.log("Successfuly saved!");
-    res.status(201);
+router.post("/", async (req, res) => {
+  const filter = {personalCode: req.body.personalCode};
+  const  doc = req.body;
+  const options = {
+    upsert: true
+  };
+  const {n, nModified} = await User.updateOne(filter, doc, options);
+    console.log("New:", n);
+    console.log("Updated:", nModified);
+    res.send(200);
+});
+
+router.get("/onlineCount", (req, res) => {
+  res.send({
+    onlineCount: Math.round(Math.random(0, 100) * 100)
   });
 });
 
-/** Add something here*/
-
 module.exports = router;
-
